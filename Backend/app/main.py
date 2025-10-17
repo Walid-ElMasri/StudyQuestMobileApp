@@ -1,18 +1,30 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from app.database import init_db
 
-#  Import all router modules
-from app.routers import (
-    home,
-    progress,
-    quests,
-    cosmetics,
-    text_ai,
-    bossbattle,
-    social
-)
+from app.Routers import home, progress, bossbattle  
+try:
+    from app.Routers import quests
+except Exception:
+    quests = None
+try:
+    from app.Routers import cosmetics
+except Exception:
+    cosmetics = None
+try:
+    from app.Routers import mentor as text_ai
+except Exception:
+    text_ai = None
+try:
+    from app.Routers import socialfeatures as social
+except Exception:
+    social = None
 
-#  Create the FastAPI application
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
+
 app = FastAPI(
     title="StudyQuest Backend API",
     description=(
@@ -26,33 +38,31 @@ app = FastAPI(
         "- Mohamad: Social Features"
     ),
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 
-#  Include all routers
 app.include_router(home.router)
 app.include_router(progress.router)
-app.include_router(quests.router)
-app.include_router(cosmetics.router)
-app.include_router(text_ai.router)
+if quests and hasattr(quests, "router"):
+    app.include_router(quests.router)
 app.include_router(bossbattle.router)
-app.include_router(social.router)
+if cosmetics and hasattr(cosmetics, "router"):
+    app.include_router(cosmetics.router)
+if text_ai and hasattr(text_ai, "router"):
+    app.include_router(text_ai.router)
+if social and hasattr(social, "router"):
+    app.include_router(social.router)
 
 
-#  Initialize the database when the app starts
-@app.on_event("startup")
-def on_startup():
-    init_db()
 
-
-#  Root route (API homepage)
 @app.get("/", tags=["Root"])
 def root():
     """
     StudyQuest API landing page — shows available endpoints and docs link.
     """
     return {
-        "message": "Welcome to the StudyQuest Backend API 🎯",
+        "message": "Welcome to the StudyQuest Backend API",
         "status": "running",
         "main_endpoints": {
             "Home Dashboard": "/home/dashboard?user=<username>",
