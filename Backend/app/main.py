@@ -69,7 +69,7 @@ def root():
             "Progress Tracking": "/progress",
             "Quests & Levels": "/quests",
             "Cosmetics & Rewards": "/cosmetics",
-            "AI Text Mentor": "/text-ai",
+            "AI Text Mentor": "/mentor",
             "Daily Boss Battle": "/boss",
             "Social Features": "/social"
         },
