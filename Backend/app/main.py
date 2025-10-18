@@ -7,9 +7,9 @@ from app.routers import (
     progress,
     quests,
     cosmetics,
-    text_ai,
+    mentor,
     bossbattle,
-    social
+    socialfeatures
 )
 
 #  Create the FastAPI application
@@ -32,11 +32,11 @@ app = FastAPI(
 #  Include all routers
 app.include_router(home.router)
 app.include_router(progress.router)
-app.include_router(quests.router)
-app.include_router(cosmetics.router)
-app.include_router(text_ai.router)
-app.include_router(bossbattle.router)
-app.include_router(social.router)
+# app.include_router(quests.router)
+# app.include_router(cosmetics.router)
+app.include_router(mentor.router)
+# app.include_router(bossbattle.router)
+app.include_router(socialfeatures.router)
 
 
 #  Initialize the database when the app starts
@@ -59,7 +59,7 @@ def root():
             "Progress Tracking": "/progress",
             "Quests & Levels": "/quests",
             "Cosmetics & Rewards": "/cosmetics",
-            "AI Text Mentor": "/text-ai",
+            "AI Text Mentor": "/mentor",
             "Daily Boss Battle": "/boss",
             "Social Features": "/social"
         },
