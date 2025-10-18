@@ -1,23 +1,24 @@
-from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.database import init_db
+from fastapi import FastAPI
 
-from app.Routers import home, progress, bossbattle  
+from app.database import init_db
+from app.routers import bossbattle, home, progress
+
 try:
-    from app.Routers import quests
-except Exception:
+    from app.routers import quests
+except ImportError:
     quests = None
 try:
-    from app.Routers import cosmetics
-except Exception:
+    from app.routers import cosmetics
+except ImportError:
     cosmetics = None
 try:
-    from app.Routers import mentor as text_ai
-except Exception:
+    from app.routers import text_ai
+except ImportError:
     text_ai = None
 try:
-    from app.Routers import socialfeatures as social
-except Exception:
+    from app.routers import socialfeatures as social
+except ImportError:
     social = None
 
 @asynccontextmanager
@@ -69,10 +70,9 @@ def root():
             "Progress Tracking": "/progress",
             "Quests & Levels": "/quests",
             "Cosmetics & Rewards": "/cosmetics",
-            "AI Text Mentor": "/mentor",
+            "AI Text Mentor": "/text-ai",
             "Daily Boss Battle": "/boss",
             "Social Features": "/social"
         },
         "docs": "/docs",
     }
-
